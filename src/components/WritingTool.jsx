@@ -5,7 +5,7 @@ const WritingTool = () => {
   const textRef = useRef([]);
 
   const maxLinesPerPage = 27;
-  const maxWordsPerPage = 150;
+  const maxWordsPerPage = 210;
 
   const handleChange = (e, pageIndex) => {
     const text = e.target.value;
@@ -39,7 +39,10 @@ const WritingTool = () => {
         textRef.current[pageIndex + 1]?.focus();
       }, 0);
     } else if (pages.length > pageIndex + 1) {
-      updatedPages.splice(pageIndex + 1, 1); 
+        updatedPages.splice(pageIndex + 1, 1); 
+        setTimeout(() => {
+          textRef.current[pageIndex + 1]?.focus();
+        }, 0);
     }
 
     setPages(updatedPages);
