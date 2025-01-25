@@ -1,65 +1,67 @@
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const WritingTool = () => {
   const [pages, setPages] = useState([""]);
   const textRef = useRef([]);
 
+  const maxLinesPerPage = 27;
+  const maxWordsPerPage = 150;
+
   const handleChange = (e, pageIndex) => {
     const text = e.target.value;
-  
     const lines = text.split("\n");
- 
-    const maxLinesPerPage = 27; 
-   
-    const currentPageText = lines.slice(0, maxLinesPerPage).join("\n");
+    
+    const currentPageText = [];
+    let overflowText = "";
 
-    const overflowText = lines.slice(maxLinesPerPage).join("\n");
-   
+    
+    let wordCount = 0;
+    for (let line of lines) {
+      const lineWords = line.split(/\s+/);
+      if (wordCount + lineWords.length > maxWordsPerPage || currentPageText.length >= maxLinesPerPage) {
+        overflowText += line + "\n";
+      } else {
+        currentPageText.push(line);
+        wordCount += lineWords.length;
+      }
+    }
+
     const updatedPages = [...pages];
+    updatedPages[pageIndex] = currentPageText.join("\n");
 
-    updatedPages[pageIndex] = currentPageText;
+    if (overflowText.trim()|| lines.length > maxLinesPerPage) {
+      if (pages.length - 1 === pageIndex) {
+        updatedPages.push(overflowText.trim());
+      } else {
+        updatedPages[pageIndex + 1] = overflowText.trim();
+      }
+      setTimeout(() => {
+        textRef.current[pageIndex + 1]?.focus();
+      }, 0);
+    } else if (pages.length > pageIndex + 1) {
+      updatedPages.splice(pageIndex + 1, 1); 
+    }
 
-        if(textRef.current){
-            if (lines.length > maxLinesPerPage) {
-                if (pages.length - 1 === pageIndex) {
-                    updatedPages.push(overflowText);
-                    setTimeout(() => {         
-                        textRef.current[pageIndex + 1]?.focus();
-                    }, 0);
-                } else {
-                    updatedPages[pageIndex + 1] = overflowText;
-                    setTimeout(() => {
-                        textRef.current[pageIndex + 1]?.focus();
-                    }, 0);
-                }
-            } else if (pages.length > pageIndex + 1) {
-                updatedPages.splice(pageIndex + 1, 1);
-            }            
-        }
-            
- setPages(updatedPages);
+    setPages(updatedPages);
+  };
 
-};
-
-const addPageRef = (ref, index) => {
-     if (ref && !textRef.current[index]) {
+  const addPageRef = (ref, index) => {
+    if (ref && !textRef.current[index]) {
       textRef.current[index] = ref;
-            }
+    }
   };
 
   return (
     <div className="flex flex-col items-center">
       {pages.map((content, index) => (
-      
-            <textarea
-             key={index}
-            value={content}
-            ref={(ref) => addPageRef(ref, index)}
-            onChange={(e) => handleChange(e, index)}
-            className="w-[110mm] h-[180mm]  p-2 m-2 border border-slate-200 shadow-lg resize-none  focus:outline-none "
-            placeholder="Start writing..."
-            ></textarea>
-      
+        <textarea
+          key={index}
+          value={content}
+          ref={(ref) => addPageRef(ref, index)}
+          onChange={(e) => handleChange(e, index)}
+          className="w-[110mm] h-[180mm] p-2 m-2 border border-slate-200 shadow-lg resize-none focus:outline-none"
+          placeholder={`Page ${index + 1}`}
+        ></textarea>
       ))}
     </div>
   );
