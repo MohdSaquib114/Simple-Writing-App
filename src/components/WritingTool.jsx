@@ -1,51 +1,19 @@
 import { useRef, useState } from "react";
 
 const WritingTool = () => {
-  const [pages, setPages] = useState([""]); 
+  const [pages, setPages] = useState([""]); // Initialize with one empty page
   const textRef = useRef([]);
 
-  const maxLinesPerPage = 40; 
-  const charPerLine = 100;
+  const maxLinesPerPage = 40; // Maximum lines per page
+  const charPerLine = 100; // Maximum characters per line
 
-  
-//   const textStructure = (text) => {
-//     const paragraphs = text.split("\n"); 
-//     const lines = [];
-
-//     paragraphs.forEach((paragraph) => {
-//       const words = paragraph.split(/\s+/); 
-//       let currentLine = "";
-//       let charCount = 0;
-
-//       words.forEach((word) => {
-//         if (charCount + word.length + 1 > charPerLine) {
-         
-//           lines.push(currentLine.trim());
-//           currentLine = word + " ";
-//           charCount = word.length + 1;
-//         } else {
-         
-//           currentLine += word + " ";
-//           charCount += word.length + 1;
-//         }
-//       });
-
-    
-//       if (currentLine.trim()) {
-//         lines.push(currentLine.trim());
-//       }
-//     });
-
-//     return lines;
-//   };
-
-  
+  // Handle text changes in the textarea
   const handleChange = (e, pageIndex) => {
     const text = e.target.value;
 
     // Split text into lines, preserving explicit newlines
     const lines = text.split("\n");
-  
+
     // Process each line to wrap text based on character limit
     const wrappedLines = lines.flatMap((line) => {
       const words = line.split(/\s+/);
@@ -106,7 +74,19 @@ const WritingTool = () => {
     // Focus the next page if there's overflow text
     if (overflowText && textRef.current[pageIndex + 1]) {
       setTimeout(() => {
-        textRef.current[pageIndex + 1].focus();
+        const nextTextarea = textRef.current[pageIndex + 1];
+        nextTextarea.focus();
+
+        // Move the cursor to the start of the next page's text
+        nextTextarea.setSelectionRange(0, 0);
+      }, 0);
+    } else if (textRef.current[pageIndex]) {
+      // Restore the cursor position in the current textarea
+      const currentTextarea = textRef.current[pageIndex];
+      const cursorPosition = e.target.selectionStart;
+
+      setTimeout(() => {
+        currentTextarea.setSelectionRange(cursorPosition, cursorPosition);
       }, 0);
     }
   };
@@ -128,8 +108,8 @@ const WritingTool = () => {
           onChange={(e) => handleChange(e, index)}
           className="w-[210mm] h-[280mm] p-2 m-2 border border-slate-200 shadow-lg resize-none focus:outline-none overflow-hidden"
           placeholder={`Page ${index + 1}`}
-          rows={maxLinesPerPage} 
-          style={{ overflow: "hidden" }} 
+          rows={maxLinesPerPage} // Set the number of visible rows
+          style={{ overflow: "hidden" }} // Disable scrolling
         />
       ))}
     </div>
