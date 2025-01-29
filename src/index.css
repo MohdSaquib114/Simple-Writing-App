@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+.page-break {
+    page-break-before: always;
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+    border-top: 2px dashed gray;
+    color: gray;
+    font-weight: bold;
+  }
+  

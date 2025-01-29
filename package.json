@@ -11,9 +11,17 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@tiptap/pm": "^2.11.3",
+    "@tiptap/react": "^2.11.3",
+    "@tiptap/starter-kit": "^2.11.3",
+    "prosemirror-model": "^1.24.1",
+    "prosemirror-schema-basic": "^1.2.3",
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-view": "^1.37.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.0.0",
+    "tiptap-pagination-breaks": "^1.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
