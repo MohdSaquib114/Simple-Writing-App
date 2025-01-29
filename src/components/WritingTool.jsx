@@ -219,27 +219,22 @@ const DocsEditor = () => {
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-gray-100 p-8">
       {/* Toolbar */}
-      <div className="sticky top-0 w-full max-w-4xl mb-4 bg-white p-2 rounded-lg shadow-sm flex items-center justify-between z-10">
-        <span className="text-sm">
-          {pages.length} {pages.length === 1 ? 'page' : 'pages'}
-        </span>
-      </div>
+     
 
       {/* Pages Container */}
       <div className="flex flex-col items-center space-y-8">
         {pages.map((page, index) => (
           <div 
             key={page.id}
-            className="bg-white shadow-lg relative"
+            className="bg-white shadow-xl border border-slate-300 relative"
             style={{
               width: `${A4_WIDTH}px`,
               height: `${A4_HEIGHT}px`,
               padding: `${MARGIN}px`,
             }}
           >
-            <div className="absolute top-4 left-4 text-sm text-gray-400">
-              Page {index + 1}
-            </div>
+           
+           
             <textarea
               ref={el => textareaRefs.current[index] = el}
               value={page.content}
